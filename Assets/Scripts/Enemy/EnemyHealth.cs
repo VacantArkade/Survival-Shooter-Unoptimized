@@ -16,6 +16,8 @@ public class EnemyHealth : MonoBehaviour
     bool isDead;
     bool isSinking;
 
+    ScoreManager scoreManager;
+
 
     void Awake ()
     {
@@ -75,6 +77,7 @@ public class EnemyHealth : MonoBehaviour
         GetComponent <Rigidbody> ().isKinematic = true;
         isSinking = true;
         ScoreManager.score += scoreValue;
+        //scoreManager.IncreaseScore(scoreValue);
         Destroy (gameObject, 2f);
     }
 }
