@@ -8,21 +8,20 @@ public class EnemyMovement : MonoBehaviour
     private EnemyHealth EnemyHealth;
     private NavMeshAgent agent;
     private PlayerHealth playerHealth;
-    private Transform playerPos;
+    private Transform player;
 
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         EnemyHealth = GetComponent<EnemyHealth>();
-        playerHealth = GetComponent<PlayerHealth>();
-        playerPos = GetComponent<Transform>().transform;
+        player = FindAnyObjectByType<PlayerMovement>().transform;
+        playerHealth = player.GetComponent<PlayerHealth>();
     }
 
     void Update ()
     {
-        Transform player = FindObjectOfType<PlayerMovement>().transform;
 
-        if (EnemyHealth.currentHealth > 0 && player.GetComponent<PlayerHealth>().currentHealth > 0)
+        if (EnemyHealth.currentHealth > 0 && playerHealth.currentHealth > 0)
         {
             agent.SetDestination (player.position);
         }
