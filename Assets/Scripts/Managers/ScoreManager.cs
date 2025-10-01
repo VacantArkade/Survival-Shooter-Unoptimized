@@ -6,6 +6,10 @@ public class ScoreManager : MonoBehaviour
 {
     public static int score;
 
+    SO_Score objectScore;
+
+    [SerializeField] ScriptableObject scoreNum;
+
 
     [SerializeField] Text text;
 
@@ -18,7 +22,7 @@ public class ScoreManager : MonoBehaviour
 
     void Update ()
     {
-        //text.text = "Score: " + score;
+        text.text = "Score: " + score;
     }
 
     public void IncreaseScore(int score)

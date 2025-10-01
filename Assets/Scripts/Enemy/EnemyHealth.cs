@@ -18,6 +18,10 @@ public class EnemyHealth : MonoBehaviour
 
     ScoreManager scoreManager;
 
+    SO_Score objectScore;
+
+    [SerializeField] ScriptableObject score;
+
 
     void Awake ()
     {
@@ -77,7 +81,7 @@ public class EnemyHealth : MonoBehaviour
         GetComponent <Rigidbody> ().isKinematic = true;
         isSinking = true;
         ScoreManager.score += scoreValue;
-        //scoreManager.IncreaseScore(scoreValue);
+        //score.score += scoreValue;
         Destroy (gameObject, 2f);
     }
 }

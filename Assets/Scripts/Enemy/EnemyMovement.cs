@@ -20,7 +20,6 @@ public class EnemyMovement : MonoBehaviour
 
     void Update ()
     {
-
         if (EnemyHealth.currentHealth > 0 && playerHealth.currentHealth > 0)
         {
             agent.SetDestination (player.position);
