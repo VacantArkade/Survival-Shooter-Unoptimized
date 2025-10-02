@@ -9927,6 +9927,7 @@ GameObject:
   - component: {fileID: 114285404358126916}
   - component: {fileID: 114153904350160260}
   - component: {fileID: 114290231285748624}
+  - component: {fileID: -5066708650529293871}
   m_Layer: 9
   m_Name: Hellephant
   m_TagString: Untagged
@@ -10191,12 +10192,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9b9d14572410594cb85d40eedfb150c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 300
   currentHealth: 0
-  sinkSpeed: 2.5
-  scoreValue: 50
   deathClip: {fileID: 8300000, guid: 8c615fd0429f34edf85539d70279360d, type: 3}
   scoreNum: {fileID: 11400000, guid: 08145d2245412934aa2989d76ff6a412, type: 2}
+  stats: {fileID: 11400000, guid: 7a31180bb3d06584f831014bfc5e15b2, type: 2}
 --- !u!114 &114290231285748624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10209,9 +10208,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e15099f5ee559584089d5851df572def, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeBetweenAttacks: 0.5
-  attackDamage: 30
   healthCon: {fileID: 11400000, guid: d88e71e5b63aae8499b12ab4cbe03c2d, type: 2}
+  stats: {fileID: 11400000, guid: 7a31180bb3d06584f831014bfc5e15b2, type: 2}
+--- !u!114 &-5066708650529293871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1819768538276330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a29a721caf85644193d5d798e217c73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabReference: {fileID: 1819768538276330}
 --- !u!1 &1915870434614438
 GameObject:
   m_ObjectHideFlags: 0

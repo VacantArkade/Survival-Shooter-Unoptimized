@@ -20,15 +20,16 @@ public class EnemyMovement : MonoBehaviour
         playerHealth = player.GetComponent<PlayerHealth>();
     }
 
-    void Update ()
+    void Update()
     {
-        if (EnemyHealth.currentHealth > 0 && healthCon.health > 0)
-        {
-            agent.SetDestination (player.position);
+        if (EnemyHealth != null && playerHealth != null && playerHealth.currentHealth > 0 && agent != null && agent.enabled && agent.isActiveAndEnabled)
+            {
+                agent.SetDestination(player.position);
+            }
+        else if (agent != null && agent.enabled)
+            {
+                agent.isStopped = true;
+                agent.ResetPath();
+            }
         }
-        else
-        {
-            agent.enabled = false;
-        }
-    }
 }

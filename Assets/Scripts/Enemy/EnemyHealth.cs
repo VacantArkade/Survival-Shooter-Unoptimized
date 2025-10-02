@@ -1,13 +1,11 @@
 ﻿using System.Collections;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyHealth : MonoBehaviour
+public class EnemyHealth : PooledObject
 {
-    public int startingHealth = 100;
     public int currentHealth;
-    public float sinkSpeed = 2.5f;
-    public int scoreValue = 10;
     public AudioClip deathClip;
 
 
@@ -20,21 +18,20 @@ public class EnemyHealth : MonoBehaviour
 
     //My variables
     [SerializeField] SO_Score scoreNum;
+    [SerializeField] SO_EnemyConfig stats;
 
     private NavMeshAgent agent;
     private Rigidbody rb;
-    private float sinkTime;
 
     private static readonly int hashDead = Animator.StringToHash("Dead");
 
     void Awake ()
     {
+        currentHealth = stats.startHealth;
         anim = GetComponent <Animator> ();
         enemyAudio = GetComponent <AudioSource> ();
         hitParticles = GetComponentInChildren <ParticleSystem> ();
         capsuleCollider = GetComponent <CapsuleCollider> ();
-
-        currentHealth = startingHealth;
 
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
@@ -45,7 +42,7 @@ public class EnemyHealth : MonoBehaviour
     {
         if(isSinking)
         {
-            transform.Translate (-Vector3.up * sinkSpeed * Time.deltaTime);
+            transform.Translate (-Vector3.up * stats.sinkSpd * Time.deltaTime);
         }
     }
 
@@ -87,17 +84,44 @@ public class EnemyHealth : MonoBehaviour
         agent.enabled = false;
         rb.isKinematic = true;
         isSinking = true;
-        scoreNum.score += scoreValue;
-        StartCoroutine(sink());
-        Destroy (gameObject, 2f);
+        scoreNum.score += stats.score;
+        StartCoroutine(SinkAndDespawn());
     }
 
-    IEnumerator sink()
+    private IEnumerator SinkAndDespawn()
     {
-        /*sinkTime += Time.deltaTime;
-        if(sinkTime < 2)
-            transform.Translate(-Vector3.up * sinkSpeed * Time.deltaTime);*/ //Not working
-        yield return new WaitForSeconds(2);
-        Debug.Log("Activates");
+        yield return new WaitForSeconds(2f);
+        PoolManager.Instance.Despawn(gameObject);
     }
+
+    public override void OnSpawned()
+    {
+        isDead = false;
+        isSinking = false;
+        currentHealth = stats.startHealth;
+        if (capsuleCollider != null)
+            capsuleCollider.isTrigger = false;
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+        var nav = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        if (nav != null)
+        {
+            nav.enabled = true;
+            nav.isStopped = false;
+            nav.ResetPath();
+        }
+
+        if (anim != null)
+        {
+            anim.Rebind();
+            anim.Update(0f);
+        }
+    }
+
 }

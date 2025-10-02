@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -12,24 +13,39 @@ public class PlayerMovement : MonoBehaviour
 
     private static readonly int hashIsWalking = Animator.StringToHash("IsWalking");
 
+	private IA_Player playerMove;
+	//bool isWalking = false;
+	private Vector2 moveInput;
+
     void Awake()
 	{
 		floorMask = LayerMask.GetMask("Floor");
 		anim = GetComponent<Animator>();
 		playerRigidbody = GetComponent<Rigidbody>();
+
+		playerMove = new IA_Player();
 	}
 
 	void FixedUpdate()
 	{
-		float h = Input.GetAxisRaw("Horizontal");
-		float v = Input.GetAxisRaw("Vertical");
+        Move(moveInput.x, moveInput.y);
+        Turning();
+        Animating(moveInput.x, moveInput.y);
+    }
 
-		Move(h, v);
-		Turning();
-		Animating(h, v);
-	}
+    private void OnEnable()
+    {
+        playerMove.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
+        playerMove.Player.Move.canceled += ctx => moveInput = Vector2.zero;
+        playerMove.Enable();
+    }
 
-	void Move(float h, float v)
+    void OnDisable()
+    {
+        playerMove.Disable();
+    }
+
+    void Move(float h, float v)
 	{
 		movement.Set(h, 0f, v);
 		movement = movement.normalized * speed * Time.deltaTime;
@@ -55,6 +71,6 @@ public class PlayerMovement : MonoBehaviour
 	{
 		bool walking = h != 0f || v != 0f;
 
-        anim.SetBool("IsWalking", walking);
+        anim.SetBool(hashIsWalking, walking);
 	}
 }

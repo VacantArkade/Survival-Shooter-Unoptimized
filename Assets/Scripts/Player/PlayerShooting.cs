@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerShooting : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class PlayerShooting : MonoBehaviour
     Light gunLight;
     float effectsDisplayTime = 0.2f;
 
+    //My variables
+    bool isFiring;
+    private IA_Player map;
 
     void Awake ()
     {
@@ -25,14 +29,28 @@ public class PlayerShooting : MonoBehaviour
         gunLine = GetComponent <LineRenderer> ();
         gunAudio = GetComponent<AudioSource> ();
         gunLight = GetComponent<Light> ();
+
+        map = new IA_Player ();
     }
 
+
+    private void OnEnable()
+    {
+        map.Player.Shoot.performed += ctx => isFiring = true;
+        map.Player.Shoot.canceled += ctx => isFiring = false;
+        map.Enable();
+    }
+
+    void OnDisable()
+    {
+        map.Disable();
+    }
 
     void Update ()
     {
         timer += Time.deltaTime;
 
-		if(Input.GetButton ("Fire1") && timer >= timeBetweenBullets && Time.timeScale != 0)
+		if(isFiring && timer >= timeBetweenBullets && Time.timeScale != 0)
         {
             Shoot ();
         }
