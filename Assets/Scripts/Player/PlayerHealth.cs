@@ -22,6 +22,10 @@ public class PlayerHealth : MonoBehaviour
     bool isDead;
     bool damaged;
 
+    //My variables
+    [SerializeField] SO_PHealth healthCon;
+
+    private static readonly int hashDie = Animator.StringToHash("Die");
 
     void Awake ()
     {
@@ -29,7 +33,8 @@ public class PlayerHealth : MonoBehaviour
         playerAudio = GetComponent <AudioSource> ();
         playerMovement = GetComponent <PlayerMovement> ();
         playerShooting = GetComponentInChildren <PlayerShooting> ();
-        currentHealth = startingHealth;
+
+        healthCon.health = startingHealth;
     }
 
 
@@ -51,13 +56,13 @@ public class PlayerHealth : MonoBehaviour
     {
         damaged = true;
 
-        currentHealth -= amount;
+        healthCon.health -= amount;
 
-        healthSlider.value = currentHealth;
+        healthSlider.value = healthCon.health;
 
         playerAudio.Play ();
 
-        if(currentHealth <= 0 && !isDead)
+        if(healthCon.health <= 0 && !isDead)
         {
             Death ();
         }
@@ -70,7 +75,7 @@ public class PlayerHealth : MonoBehaviour
 
         playerShooting.DisableEffects ();
 
-        anim.SetTrigger ("Die");
+        anim.SetTrigger(hashDie);
 
         playerAudio.clip = deathClip;
         playerAudio.Play ();

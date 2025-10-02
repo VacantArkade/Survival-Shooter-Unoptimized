@@ -10,7 +10,9 @@ public class PlayerMovement : MonoBehaviour
 	private int floorMask;
 	private float camRayLength = 100f;
 
-	void Awake()
+    private static readonly int hashIsWalking = Animator.StringToHash("IsWalking");
+
+    void Awake()
 	{
 		floorMask = LayerMask.GetMask("Floor");
 		anim = GetComponent<Animator>();
@@ -53,6 +55,6 @@ public class PlayerMovement : MonoBehaviour
 	{
 		bool walking = h != 0f || v != 0f;
 
-		anim.SetBool("IsWalking", walking);
+        anim.SetBool("IsWalking", walking);
 	}
 }

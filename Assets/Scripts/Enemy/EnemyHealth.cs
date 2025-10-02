@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyHealth : MonoBehaviour
 {
@@ -16,12 +18,14 @@ public class EnemyHealth : MonoBehaviour
     bool isDead;
     bool isSinking;
 
-    ScoreManager scoreManager;
+    //My variables
+    [SerializeField] SO_Score scoreNum;
 
-    SO_Score objectScore;
+    private NavMeshAgent agent;
+    private Rigidbody rb;
+    private float sinkTime;
 
-    [SerializeField] ScriptableObject score;
-
+    private static readonly int hashDead = Animator.StringToHash("Dead");
 
     void Awake ()
     {
@@ -31,6 +35,9 @@ public class EnemyHealth : MonoBehaviour
         capsuleCollider = GetComponent <CapsuleCollider> ();
 
         currentHealth = startingHealth;
+
+        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        rb = GetComponent<Rigidbody>();
     }
 
 
@@ -68,7 +75,7 @@ public class EnemyHealth : MonoBehaviour
 
         capsuleCollider.isTrigger = true;
 
-        anim.SetTrigger ("Dead");
+        anim.SetTrigger(hashDead);
 
         enemyAudio.clip = deathClip;
         enemyAudio.Play ();
@@ -77,11 +84,20 @@ public class EnemyHealth : MonoBehaviour
 
     public void StartSinking ()
     {
-        GetComponent <UnityEngine.AI.NavMeshAgent> ().enabled = false;
-        GetComponent <Rigidbody> ().isKinematic = true;
+        agent.enabled = false;
+        rb.isKinematic = true;
         isSinking = true;
-        ScoreManager.score += scoreValue;
-        //score.score += scoreValue;
+        scoreNum.score += scoreValue;
+        StartCoroutine(sink());
         Destroy (gameObject, 2f);
+    }
+
+    IEnumerator sink()
+    {
+        /*sinkTime += Time.deltaTime;
+        if(sinkTime < 2)
+            transform.Translate(-Vector3.up * sinkSpeed * Time.deltaTime);*/ //Not working
+        yield return new WaitForSeconds(2);
+        Debug.Log("Activates");
     }
 }

@@ -10,6 +10,8 @@ public class EnemyMovement : MonoBehaviour
     private PlayerHealth playerHealth;
     private Transform player;
 
+    [SerializeField] SO_PHealth healthCon;
+
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -20,7 +22,7 @@ public class EnemyMovement : MonoBehaviour
 
     void Update ()
     {
-        if (EnemyHealth.currentHealth > 0 && playerHealth.currentHealth > 0)
+        if (EnemyHealth.currentHealth > 0 && healthCon.health > 0)
         {
             agent.SetDestination (player.position);
         }

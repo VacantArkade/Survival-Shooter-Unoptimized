@@ -14,6 +14,11 @@ public class EnemyAttack : MonoBehaviour
     bool playerInRange;
     float timer;
 
+    //My variables
+    [SerializeField] SO_PHealth healthCon;
+
+    private static readonly int hashPlayerDead = Animator.StringToHash("PlayerDead");
+
 
     void Awake ()
     {
@@ -53,7 +58,7 @@ public class EnemyAttack : MonoBehaviour
 
         if(playerHealth.currentHealth <= 0)
         {
-            anim.SetTrigger ("PlayerDead");
+            anim.SetTrigger(hashPlayerDead);
         }
     }
 
@@ -62,7 +67,7 @@ public class EnemyAttack : MonoBehaviour
     {
         timer = 0f;
 
-        if(playerHealth.currentHealth > 0)
+        if(healthCon.health > 0)
         {
             playerHealth.TakeDamage (attackDamage);
         }
